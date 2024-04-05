@@ -1,51 +1,67 @@
 let prevNum = 0;
 let prevOperation ="";
 let result =0;
-let flag = true;
-
+let opFlag = true; //represents if last button clicked was an operator - initialized at true
+let equalFlag = false; //represents if last button clicked was the equal sign
 
 const btns = document.querySelector(".buttons");
-const display = document.querySelector(".display");
+const display = document.querySelector(".display"); 
 
 
 btns.addEventListener("click", (e) => {
     if (e.target.className ==="clearAll"){
-
+        prevNum = 0;
+        prevOperation ="";
+        result =0;
+        opFlag = true;
+        equalFlag=false;
+        display.textContent="";
     }
 
     if (e.target.className ==="digit"){
-        if  (flag===true){
+        if  (opFlag===true){
             display.textContent=e.target.textContent;
-            flag = false;
+            opFlag = !opFlag;
+
+            if (equalFlag===true){
+                equalFlag=!equalFlag;
+            }
         }
         else {
             display.textContent+=e.target.textContent;
         }
     }
 
-    else if ((e.target.className ==="operator")&&(flag===false)){
-
-        if (prevOperation===""){
+    else if (e.target.className ==="operator"){
+        if (opFlag===false){
+            if (prevOperation===""){
+                prevNum=Number(display.textContent);
+                prevOperation=e.target.id;
+                opFlag=true;
+            }
+            else {
+                result = operate(prevNum,Number(display.textContent),prevOperation);
+                display.textContent=result;
+                prevNum=result;
+                prevOperation=e.target.id;
+                opFlag=true;
+            }
+        }
+        else if (equalFlag===true){
             prevNum=Number(display.textContent);
             prevOperation=e.target.id;
-            flag=true;
-        }
-        else {
-            result = operate(prevNum,Number(display.textContent),prevOperation);
-            display.textContent=result;
-            prevNum=result;
-            prevOperation=e.target.id;
-            flag=true;
+            equalFlag=!equalFlag;
         }
     }
     
-    else if ((e.target.id ==="equalSign")&&(flag===false)&&(prevOperation!=="")){
+    else if ((e.target.id ==="equalSign")&&(opFlag===false)&&(prevOperation!=="")){
         result = operate(prevNum,Number(display.textContent),prevOperation);
         display.textContent=result;
+        equalFlag=true;
+        opFlag=true;
         prevNum="";
-        prevOperation="";
         result=0;
-        flag=true;
+        prevOperation="";
     }
 
 })
