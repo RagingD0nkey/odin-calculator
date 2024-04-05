@@ -9,18 +9,23 @@ const display = document.querySelector(".display");
 
 
 btns.addEventListener("click", (e) => {
+
     if (e.target.className ==="clearAll"){
         prevNum = 0;
         prevOperation ="";
         result =0;
         opFlag = true;
         equalFlag=false;
-        display.textContent="";
+        updateDisplay("",true);
+    }
+
+    if (e.target.className ==="decimal"){
+
     }
 
     if (e.target.className ==="digit"){
         if  (opFlag===true){
-            display.textContent=e.target.textContent;
+            updateDisplay(e.target.textContent,true)
             opFlag = !opFlag;
 
             if (equalFlag===true){
@@ -28,7 +33,7 @@ btns.addEventListener("click", (e) => {
             }
         }
         else {
-            display.textContent+=e.target.textContent;
+            updateDisplay(e.target.textContent);
         }
     }
 
@@ -87,6 +92,15 @@ let multiply = function(a,b){
 let divide = function(a,b){
     if ((Number.isInteger(a)===true)&&(Number.isInteger(b)===true)){
         return a/b;
+    }
+}
+
+function updateDisplay(newChar, replace = false){
+    if (replace===false){
+        display.textContent+=newChar;
+    }
+    else if (replace===true){
+        display.textContent=newChar;
     }
 }
 
