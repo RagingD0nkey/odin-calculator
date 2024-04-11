@@ -20,7 +20,9 @@ btns.addEventListener("click", (e) => {
     }
 
     if (e.target.className ==="decimal"){
-
+        if ((display.textContent!=="")&&(Number.isInteger(parseFloat(display.textContent))===true)){
+            updateDisplay(".");
+        }
     }
 
     if (e.target.className ==="digit"){
@@ -72,25 +74,25 @@ btns.addEventListener("click", (e) => {
 })
 
 let add = function(a,b){
-    if ((Number.isInteger(a)===true)&&(Number.isInteger(b)===true)){
+    if ((isNaN(a)===false)&&(isNaN(b)===false)){
         return a+b;
     }
 }
 
 let subtract = function(a,b){
-    if ((Number.isInteger(a)===true)&&(Number.isInteger(b)===true)){
+    if ((isNaN(a)===false)&&(isNaN(b)===false)){
         return a-b;
     }
 }
 
 let multiply = function(a,b){
-    if ((Number.isInteger(a)===true)&&(Number.isInteger(b)===true)){
+    if ((isNaN(a)===false)&&(isNaN(b)===false)){
         return a*b;
     }
 }
 
 let divide = function(a,b){
-    if ((Number.isInteger(a)===true)&&(Number.isInteger(b)===true)){
+    if ((isNaN(a)===false)&&(isNaN(b)===false)){
         return a/b;
     }
 }
