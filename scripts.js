@@ -40,6 +40,11 @@ btns.addEventListener("click", (e) => {
                 currNum= parseFloat(display.textContent);
             }
         }
+        else if ((prevNum!==null)&&(prevOperation==="")){ //Equal special behavior
+            updateDisplay(e.target.textContent,true);
+            prevNum=null;
+            currNum=parseFloat(display.textContent);
+        }
     }
 
     else if (e.target.className ==="operator"){
@@ -61,10 +66,9 @@ btns.addEventListener("click", (e) => {
         if ((prevNum!==null)&&(currNum!==null)&&(prevOperation!=="")){
             result = operate(prevNum,currNum,prevOperation);
             prevOperation="";
-            prevNum=null;
-            currNum=result;
+            prevNum=result; //Equal special behavior
+            currNum=result; //Equal special behavior
             updateDisplay(result,true);
-            console.log(prevNum,currNum,prevOperation)
         }
     }
 
