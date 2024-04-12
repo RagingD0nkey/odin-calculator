@@ -135,14 +135,15 @@ function updateDisplay(newChar, replace = false){
         }
     }
     else if (replace===true){
-        if (checkLength(newChar.toString())<7){
+        if (checkLength(parseFloat(newChar).toString())<7){
             display.textContent=newChar;
+        }
+        else {
+            display.textContent = newChar.toExponential(0);
         }
     }
     
 }
-
-
 
 function checkLength(valueString){
     return valueString.length;
