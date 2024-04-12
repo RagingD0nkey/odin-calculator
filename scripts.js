@@ -1,8 +1,7 @@
-let prevNum = 0;
+let prevNum = null;
 let prevOperation ="";
+let currNum = null;
 let result =0;
-let opFlag = true; //represents if last button clicked was an operator - initialized at true
-let equalFlag = false; //represents if last button clicked was the equal sign
 
 const btns = document.querySelector(".buttons");
 const display = document.querySelector(".display"); 
@@ -11,11 +10,10 @@ const display = document.querySelector(".display");
 btns.addEventListener("click", (e) => {
 
     if (e.target.className ==="clearAll"){
-        prevNum = 0;
+        prevNum = null;
         prevOperation ="";
+        currNum = null;
         result =0;
-        opFlag = true;
-        equalFlag=false;
         updateDisplay("",true);
     }
 
@@ -23,55 +21,73 @@ btns.addEventListener("click", (e) => {
         if ((display.textContent!=="")&&(Number.isInteger(parseFloat(display.textContent))===true)){
             updateDisplay(".");
         }
+        
     }
 
     if (e.target.className ==="digit"){
-        if  (opFlag===true){
-            updateDisplay(e.target.textContent,true)
-            opFlag = !opFlag;
+        if  ((prevNum===null)&&(prevOperation==="")){
 
-            if (equalFlag===true){
-                equalFlag=!equalFlag;
-            }
+                updateDisplay(e.target.textContent);
+                currNum= parseFloat(display.textContent);
+
         }
-        else {
-            updateDisplay(e.target.textContent);
+        else if ((prevNum!==null)&&(prevOperation!=="")){
+            if (currNum===null){ //Start of second operand
+                updateDisplay(e.target.textContent,true);
+                currNum=parseFloat(display.textContent);
+            } else{ //Continue second operand
+                updateDisplay(e.target.textContent);
+                currNum= parseFloat(display.textContent);
+            }
         }
     }
 
     else if (e.target.className ==="operator"){
-        if (opFlag===false){
-            if (prevOperation===""){
-                prevNum=Number(display.textContent);
-                prevOperation=e.target.id;
-                opFlag=true;
-            }
-            else {
-                result = operate(prevNum,Number(display.textContent),prevOperation);
-                display.textContent=result;
-                prevNum=result;
-                prevOperation=e.target.id;
-                opFlag=true;
-            }
-        }
-        else if (equalFlag===true){
-            prevNum=Number(display.textContent);
+        if ((currNum!==null)&&(prevOperation==="")){
+            prevNum=currNum;
             prevOperation=e.target.id;
-            equalFlag=!equalFlag;
+            currNum=null; 
+        }
+        else if ((currNum!==null)&&(prevOperation!=="")){
+            result = operate(prevNum,currNum,prevOperation);
+            prevNum=result;
+            prevOperation=e.target.id;
+            currNum=null;
+            updateDisplay(result,true);
         }
     }
     
-    else if ((e.target.id ==="equalSign")&&(opFlag===false)&&(prevOperation!=="")){
-        result = operate(prevNum,Number(display.textContent),prevOperation);
-        display.textContent=result;
-        equalFlag=true;
-        opFlag=true;
-        prevNum="";
-        result=0;
-        prevOperation="";
+    else if (e.target.id ==="equalSign"){
+        if ((prevNum!==null)&&(currNum!==null)&&(prevOperation!=="")){
+            result = operate(prevNum,currNum,prevOperation);
+            prevOperation="";
+            prevNum=null;
+            currNum=result;
+            updateDisplay(result,true);
+            console.log(prevNum,currNum,prevOperation)
+        }
     }
 
 })
+
+
+//Mathematical functions
+function operate(operandA,operandB,operator){
+    switch(operator){
+        case "add":
+            return add(operandA,operandB);
+            break;
+        case "subtract":
+            return subtract(operandA,operandB);
+            break;
+        case "multiply":
+            return multiply(operandA,operandB);
+            break;
+        case "divide":
+            return divide(operandA,operandB);
+            break;
+    }
+}
 
 let add = function(a,b){
     if ((isNaN(a)===false)&&(isNaN(b)===false)){
@@ -97,6 +113,8 @@ let divide = function(a,b){
     }
 }
 
+
+//Update .display, and replace all characters if it's a new operation
 function updateDisplay(newChar, replace = false){
     if (replace===false){
         display.textContent+=newChar;
@@ -106,19 +124,3 @@ function updateDisplay(newChar, replace = false){
     }
 }
 
-function operate(prevNum,currentNum,operator){
-    switch(operator){
-        case "add":
-            return add(prevNum,currentNum);
-            break;
-        case "subtract":
-            return subtract(prevNum,currentNum);
-            break;
-        case "multiply":
-            return multiply(prevNum,currentNum);
-            break;
-        case "divide":
-            return divide(prevNum,currentNum);
-            break;
-    }
-}
