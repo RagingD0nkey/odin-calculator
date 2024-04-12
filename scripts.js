@@ -128,11 +128,23 @@ let divide = function(a,b){
 
 //Update .display, and replace all characters if it's a new operation
 function updateDisplay(newChar, replace = false){
+
     if (replace===false){
-        display.textContent+=newChar;
+        if (checkLength(display.textContent+newChar)<7){
+            display.textContent+=newChar;
+        }
     }
     else if (replace===true){
-        display.textContent=newChar;
+        if (checkLength(newChar.toString())<7){
+            display.textContent=newChar;
+        }
     }
+    
+}
+
+
+
+function checkLength(valueString){
+    return valueString.length;
 }
 
