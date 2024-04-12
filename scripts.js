@@ -21,7 +21,6 @@ btns.addEventListener("click", (e) => {
         if ((display.textContent!=="")&&(Number.isInteger(parseFloat(display.textContent))===true)){
             updateDisplay(".");
         }
-        
     }
 
     if (e.target.className ==="negSign"){
@@ -34,10 +33,8 @@ btns.addEventListener("click", (e) => {
 
     if (e.target.className ==="digit"){
         if  ((prevNum===null)&&(prevOperation==="")){
-
                 updateDisplay(e.target.textContent);
                 currNum= parseFloat(display.textContent);
-
         }
         else if ((prevNum!==null)&&(prevOperation!=="")){
             if (currNum===null){ //Start of second operand
@@ -145,6 +142,7 @@ function updateDisplay(newChar, replace = false){
     
 }
 
+//Check lenght. If above 7 char, will replace via exponential in certain cases (results)
 function checkLength(valueString){
     return valueString.length;
 }
