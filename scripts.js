@@ -24,6 +24,14 @@ btns.addEventListener("click", (e) => {
         
     }
 
+    if (e.target.className ==="negSign"){
+        if (display.textContent!==""){
+            updateDisplay(parseFloat(display.textContent)*-1,true);
+            currNum= parseFloat(display.textContent);
+        }
+        
+    }
+
     if (e.target.className ==="digit"){
         if  ((prevNum===null)&&(prevOperation==="")){
 
